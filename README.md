@@ -141,18 +141,34 @@ Các nền tảng chính bao gồm WooCommerce, ERPNext, Luklak, và Cloudflare,
 ## Demo hệ thống
 
 ### Website trực tuyến
-- Link: [Hành Trình Ngoài Trời](#) _(Thay thế với link demo hoặc link hình ảnh)_
+- Link: [Hành Trình Ngoài Trời](/img/webtructuyen.png)
 
-![Demo Website](#) _(Thay thế với liên kết hình ảnh)_
+![Demo Website](/img/demowebtructuyen/png)
+![Giỏ hàng](/img/demowebtructuyen1/png)
+![Thanh toán](/img/demowebtructuyen2/png)
 
 ### Hệ thống ERPNext
-![Demo ERPNext](#) _(Thay thế với liên kết hình ảnh)_
+![Demo ERPNext](/img/erp-item.png)
+![Demo ERPNext Detail Product](/img/erp-item1.png)
+![Demo ERPNext Employee](/img/erp-employee.png)
 
 ### Hệ thống Luklak
-![Demo Luklak](#) _(Thay thế với liên kết hình ảnh)_
+![Demo Luklak](/img/luklak.png.png)
+![Demo Luklak](/img/luklak1.png)
+![Demo Luklak](/img/luklak2.png)
+![Demo Luklak](/img/luklak3.png)
 
 ### Tự động hóa với N8N
-![Demo N8N](#) _(Thay thế với liên kết hình ảnh)_
+![Demo N8N](/img/n8n.png)
+![Demo N8N](/img/n8n-1.png)
+![Demo N8N](/img/n8n-2.png)
+![Demo N8N](/img/n8n-3.png)
+![Demo N8N](/img/n8n-4.png)
+![Demo N8N](/img/n8n-5.png)
+![Demo N8N](/img/n8n-6.png)
+![Demo N8N](/img/n8n-7.png)
+![Demo N8N](/img/n8n-8.png)
+![Demo GHTK](/img/ghtk.png)
 
 ---
 
