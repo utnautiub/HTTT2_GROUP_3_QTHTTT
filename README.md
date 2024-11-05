@@ -141,8 +141,9 @@ Các nền tảng chính bao gồm WooCommerce, ERPNext, Luklak, và Cloudflare,
 ## Demo hệ thống
 
 ### Website trực tuyến
-- Link: [Hành Trình Ngoài Trời](/img/webtructuyen.png)
+- Link: [Hành Trình Ngoài Trời](https://trioproject.site)
 
+![Demo Website](/img/webtructuyen.png)
 ![Demo Website](/img/demowebtructuyen.png)
 ![Giỏ hàng](/img/demowebtructuyen1.png)
 ![Thanh toán](/img/demowebtructuyen2.png)
