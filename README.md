@@ -14,15 +14,14 @@ Sinh viên:
 
 ## Video DEMO
 
-<a href="https://drive.google.com/file/d/1btpuxJCvBxePPoZeVR-G8-C1ezdt_VcZ/view?usp=sharing" target="_blank">Xem video demo</a>  
+[Xem video demo](https://drive.google.com/file/d/1btpuxJCvBxePPoZeVR-G8-C1ezdt_VcZ/view?usp=sharing) 🔗 *(Nhấn Ctrl + Click để mở tab mới)*
+
 ---
 
 ## Tài liệu
 
-## Tài liệu
-
-<a href="https://1drv.ms/w/c/bc371bdf3eae6ab0/EZWHBi3gRiBArCaEQqYq1fMbHFuh8BT8GhSIqTLtB87Y3Q?e=oqdzyU" target="_blank">Word</a>  
-<a href="https://1drv.ms/p/c/bc371bdf3eae6ab0/ERrRvagF7LJMKfvogeNv-qIBuRFhxUwtEQUMtuzbxhEtg?e=PSJ0jB" target="_blank">PowerPoint</a>
+[Word](https://1drv.ms/w/c/bc371bdf3eae6ab0/EZWHBi3gRiBArCaEQqYqlfMBhFUh8BT8GhSIqILtB87Y3Q?e=oqdzyU) 🔗 *(Nhấn Ctrl + Click để mở tab mới)*
+[PowerPoint](https://1drv.ms/p/c/bc371bdf3eae6ab0/ERrRvagF7LJMkfvogehV-qIBuRFhxUwtEQUMtnuzbxhEtg?e=PSJ0jB) 🔗 *(Nhấn Ctrl + Click để mở tab mới)*
 
 ---
 
