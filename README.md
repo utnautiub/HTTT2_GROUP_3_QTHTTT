@@ -12,6 +12,12 @@ Sinh viên:
 
 ---
 
+## Video DEMO
+
+[Xem video demo](https://drive.google.com/file/d/1btpuxJCvBxePPoZeVR-G8-C1ezdt_VcZ/view?usp=sharing)
+
+---
+
 ## Mục Lục
 
 1. [Giới thiệu đề tài](#giới-thiệu-đề-tài)
