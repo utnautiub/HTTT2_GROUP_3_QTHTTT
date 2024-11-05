@@ -1,0 +1,217 @@
+{
+  "name": "WooCommerce",
+  "nodes": [
+    {
+      "parameters": {
+        "event": "order.created"
+      },
+      "id": "c42ae995-0ce8-4c45-9195-741f9bcccf21",
+      "name": "WooCommerce Trigger",
+      "type": "n8n-nodes-base.wooCommerceTrigger",
+      "typeVersion": 1,
+      "position": [
+        400,
+        380
+      ],
+      "webhookId": "af04008d-0f28-486f-ae27-7a1e80ac6d58",
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "EZOxoxISbbkbECz0",
+          "name": "WooCommerce account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Woo -> luklak: customer / order\n",
+        "height": 469.218713450293,
+        "width": 1011
+      },
+      "id": "859809d0-7206-49fc-96c4-63b54ce95e91",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        300,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://idealer.luklak.com/api/org/pcccphucthanh/hooks/0T2DtbBmZiufsDzlYqEcFXxVu5sr9yemRela1Kvr2FE",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $json.phone }}"
+            },
+            {
+              "name": "diachi",
+              "value": "={{ $json.diachi }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $json.email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "70a71d55-a504-44f3-a749-4d4f18b3803d",
+      "name": "HTTP Request - Customer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://idealer.luklak.com/api/org/pcccphucthanh/hooks/NMTqcEiYcc0otiVithjJEe0L0CGRFhwTSN3i3jeXpKw",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "name": "diachi",
+              "value": "={{ $json.address }}"
+            },
+            {
+              "name": "product",
+              "value": "={{ $json.products }}"
+            },
+            {
+              "name": "detail",
+              "value": "={{ $json.orderDetails }}"
+            },
+            {
+              "name": "money",
+              "value": "={{ $json.price }}"
+            },
+            {
+              "name": "method",
+              "value": "={{ $json.method }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $json.phone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "49eb122e-7167-48a5-a513-65568c63b0c3",
+      "name": "HTTP Request - Order",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "var first_name = $json.billing.first_name;\nvar last_name = $json.billing.last_name;\nvar address = $json.billing.address_1;\nvar email = $json.billing.email;\nvar phone = $json.billing.phone;\n\nvar name = first_name + ' ' +last_name;\n\n\n\nreturn {name: name, diachi: address, email: email, phone: phone};\n\n\n"
+      },
+      "id": "c4616b30-be9b-4418-a666-36ffcaa6cba4",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const first = $json.billing.first_name;\nconst last = $json.billing.last_name;\nvar phone = $json.billing.phone;\n\n// 1. Tạo trường 'name' bằng cách nối 'first_name' và 'last_name'\nconst name = first + ' ' + last;\n\n// 2. Lấy địa chỉ từ 'address_1' trong phần 'shipping'\nconst address = $json.shipping.address_1;\n\n// 3. Tạo danh sách các sản phẩm (tên các sản phẩm cách nhau bằng dấu phẩy)\nconst products = $json.line_items.map(item => item.name).join(', ');\n\n// 4. Tạo chuỗi thông tin đơn hàng (liệt kê sản phẩm và số lượng)\nconst orderDetails = $json.line_items.map(item => `${item.name} - ${item.quantity}`).join(', ');\n\n// 5. Lấy tổng giá trị đơn hàng từ 'total'\nconst price = $json.total;\n\n// 6. Lấy phương thức thanh toán từ 'payment_method'\nconst method = $json.payment_method_title;\n\n\n\n// Tạo đối tượng kết quả\nconst result = {\n    name,\n    address,\n    products,\n    orderDetails,\n    price,\n    method,\n    phone\n};\n\n// Trả về kết quả để truyền vào node HTTP Request\nreturn { json: result };\n"
+      },
+      "id": "300526d6-6847-4e42-875b-fe0eb07d7aa1",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        520
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "WooCommerce Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - Customer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - Order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "daff0233-adfc-47ef-88f7-01fb370b3207",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2631a7aa3d54abe5fc73d8421f8b14123eda65d475cdf594e6f2825725d05e9f"
+  },
+  "id": "4FuciPeC12dpOAax",
+  "tags": [
+    {
+      "createdAt": "2024-11-03T16:01:44.260Z",
+      "updatedAt": "2024-11-03T16:01:44.260Z",
+      "id": "1oGTFWGzJexHa9VQ",
+      "name": "Hải"
+    },
+    {
+      "createdAt": "2024-11-03T16:01:44.283Z",
+      "updatedAt": "2024-11-03T16:01:44.283Z",
+      "id": "izzwDenXVTDj1kiM",
+      "name": "Demo Luklak"
+    }
+  ]
+}

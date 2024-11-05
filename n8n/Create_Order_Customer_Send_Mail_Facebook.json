@@ -1,0 +1,198 @@
+{
+  "name": "Tự động tạo đơn và gửi mail cảm ơn",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "id": "1555205f-6a20-497a-a205-ff6e92d7d94a",
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        120,
+        640
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "aXRWcujPyinoUhDb",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Giả sử bạn đã lấy được snippet từ dữ liệu JSON đầu vào.\nconst snippet = $json.snippet || '';\nconst mail = $json.From;\nconst mail1 = mail.match(/<([^>]+)>/);\n\n// Sử dụng split để phân chia snippet thành các phần dựa vào dấu gạch ngang '-'\nconst parts = snippet.split(' - ').map(part => part.trim());\nconst phone = parts[3] ? parts[3].match(/\\b\\d{7,}\\b/)?.[0] || '' : ''; \n\n// Trả về đối tượng chứa kết quả\nreturn {name: parts[0] || '', quantity: parts[1] || '', address: parts[2] || '', phone: phone || '', mail: mail1[1]}\n"
+      },
+      "id": "2894d461-c696-4e7e-98c2-4eb5bdaf0eed",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        300,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://idealer.luklak.com/api/org/pcccphucthanh/hooks/z9AUH6pG3gT4lJEk46IrN-VwkEgYrtLxm0rrlAA02Nc",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "name": "diachi",
+              "value": "={{ $json.address }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $json.phone }}"
+            },
+            {
+              "name": "mail",
+              "value": "={{ $json.mail }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e634629d-33d7-4823-95c6-c06ae30fc593",
+      "name": "HTTP Request - Customer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.mail }}",
+        "subject": "[TrioShop] ĐẶT HÀNG THÀNH CÔNG",
+        "message": "=<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            margin: 0;\n            padding: 20px;\n            background-color: #f8f8f8;\n        }\n        .container {\n            max-width: 600px;\n            margin: auto;\n            background: white;\n            padding: 20px;\n            border-radius: 8px;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n        }\n        h1 {\n            color: #333;\n        }\n        p {\n            color: #555;\n        }\n        .footer {\n            margin-top: 20px;\n            font-size: 14px;\n            color: #888;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <h1>Xác Nhận Đặt Hàng Thành Công</h1>\n        <p>Cảm ơn bạn đã đặt hàng!</p>\n        <p>Dưới đây là thông tin đơn hàng của bạn:</p>\n        <ul>\n            <li><strong>Tên khách:</strong> {{ $json.name }}</li>\n            <li><strong>Sản phẩm:</strong> Nồi đa năng CampingMoon D0-28</li>\n            <li><strong>Số lượng:</strong> {{ $json.quantity }}</li>\n            <li><strong>Giá tiền:</strong> 1.600.000 VND</li>\n            <li><strong>Địa chỉ:</strong> {{ $json.address }}</li>\n            <li><strong>Số điện thoại:</strong> {{$json.phone }}</li>\n        </ul>\n        <p>Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất để xác nhận và giao hàng.</p>\n        <p>Nếu bạn có bất kỳ câu hỏi nào, hãy liên hệ với chúng tôi qua email này.</p>\n        <div class=\"footer\">\n            <p>Trân trọng,<br>Đội ngũ bán hàng</p>\n        </div>\n    </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "7718b68a-6bac-42b9-942a-ea2c26ec06e5",
+      "name": "Gmail1",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        560,
+        840
+      ],
+      "webhookId": "7f5dbbdf-713a-4a58-9b1c-931e849f5643",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "aXRWcujPyinoUhDb",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://idealer.luklak.com/api/org/pcccphucthanh/hooks/-l3tuA2tpSiUokbuymXc-zXrGjgAtHO0nu0Z3weCQA4",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "name": "product",
+              "value": "Nồi Gang Đa Năng CampingMoon D0-28"
+            },
+            {
+              "name": "method",
+              "value": "Thanh toán khi nhận hàng"
+            },
+            {
+              "name": "detail",
+              "value": "=Nồi Gang Đa Năng CampingMoon D0-28 - số lượng: {{ $json.quantity }}"
+            },
+            {
+              "name": "money",
+              "value": "1600000"
+            },
+            {
+              "name": "diachi",
+              "value": "={{ $json.address }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $json.phone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "acde0eab-e425-4906-8b54-491a6d040c80",
+      "name": "HTTP Request - Order",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        640
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - Customer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request - Order",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Gmail1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8f456563-7acb-4de0-b771-7d3ec3160dde",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "31c815f4a60f47539a5bab0849e2e736a46e06b682f7fba8657aa5cc88c6dc92"
+  },
+  "id": "gdgv7mWEEyoMEvBr",
+  "tags": []
+}

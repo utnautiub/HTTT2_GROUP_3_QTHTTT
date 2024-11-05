@@ -1,0 +1,148 @@
+{
+  "name": "Lấy comment FB",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://graph.facebook.com/v21.0/101334887991736/feed",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "fields",
+              "value": "comments"
+            },
+            {
+              "name": "access_token",
+              "value": "EAARPUN8jihwBOxg1qgtQcRxHuUUhAPzR3XHjEpmN53iDc90UexDgZCY1w7dPEdYxQoZC41Irztzk25ey9YTWtAbwi5fQkkkDxF26FNqtDuf19ZCMSC3HPdku68MSeJiSg0DT6m4ZArb2Q0m5MokqNdsNctMAEO6GZAPEZCpUjfOGFtPM7HPtZAQsU2bY2qZBPvUZD"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "efbf90e2-154e-47d0-b768-ef4bb1d5e156",
+      "name": "Lấy cmt FB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Lấy tất cả comments từ body.data[0]\nconst data = $json.body.data[0].comments?.data || [];\nconst emails = [];\n\n// Regex để tìm email trong mỗi message\nconst emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/g;\n\n// Lặp qua từng message trong comments.data để lấy email\ndata.forEach(item => {\n  const message = item.message || '';\n  \n  // Tìm tất cả các email trong message\n  const foundEmails = message.match(emailRegex);\n  \n  // Nếu tìm thấy email, thêm vào mảng emails\n  if (foundEmails) {\n    emails.push(...foundEmails);\n  }\n});\n\n// Trả về một đối tượng chứa danh sách email duy nhất\nreturn { emails:emails };\n"
+      },
+      "id": "d2bb0c8d-2a40-43cb-ab46-99c77a22feea",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json[\"emails\"].join(\", \")}}\n",
+        "subject": "[TrioShop] CẢM ƠN BẠN ĐÃ QUAN TÂM TỚI SHOP",
+        "message": "<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            margin: 0;\n            padding: 20px;\n            background-color: #f8f8f8;\n        }\n        .container {\n            max-width: 600px;\n            margin: auto;\n            background: white;\n            padding: 20px;\n            border-radius: 8px;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n        }\n        h1 {\n            color: #333;\n        }\n        p {\n            color: #555;\n        }\n        .footer {\n            margin-top: 20px;\n            font-size: 14px;\n            color: #888;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <h1>Giới Thiệu Sản Phẩm: Nồi Gang Đa Năng CampingMoon D0-28</h1>\n        <p>Cảm ơn bạn đã quan tâm đến sản phẩm Nồi Gang Đa Năng CampingMoon D0-28!</p>\n        <p>Sản phẩm này lý tưởng cho các hoạt động cắm trại, giúp bạn nấu nướng dễ dàng và tiện lợi.</p>\n        <p><strong>Giá: 1.600.000 VNĐ</strong></p>\n        <p>Để xác nhận đơn hàng, bạn vui lòng phản hồi email này với các thông tin sau:</p>\n        <ul>\n            <li>Tên khách:</li>\n            <li>Số lượng:</li>\n            <li>Địa chỉ:</li>\n            <li>Số điện thoại:</li>\n        </ul>\n        <p>Đừng quên ghé thăm website của chúng tôi: <a>trioproject.site</a> để xem thêm nhiều sản phẩm khác!</p>\n        <div class=\"footer\">\n            <p>Trân trọng,<br>Đội ngũ bán hàng</p>\n        </div>\n    </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "d67b9f3c-d7f2-4c6e-9805-bf200f138b33",
+      "name": "Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        880,
+        20
+      ],
+      "webhookId": "d59f4648-4b25-4997-9f6d-049827d7f1fe",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "aXRWcujPyinoUhDb",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Lấy comment FB và gửi mail",
+        "height": 281.64517906859896,
+        "width": 1128.6500449853447
+      },
+      "id": "c287659b-9572-4234-b18c-81c02ceb64b7",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        -53.2923647977218
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "42a9b4bd-8d25-4aa6-be11-0649c585d2b8",
+      "name": "Get Comment",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        220,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Lấy cmt FB": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Comment": {
+      "main": [
+        [
+          {
+            "node": "Lấy cmt FB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c3e0c037-8fee-4b43-a969-b6e483a50452",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "31c815f4a60f47539a5bab0849e2e736a46e06b682f7fba8657aa5cc88c6dc92"
+  },
+  "id": "MKqQSeiapNLYepWU",
+  "tags": []
+}

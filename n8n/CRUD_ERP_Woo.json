@@ -1,0 +1,301 @@
+{
+  "name": "CRUD ERP -> Woo",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "product",
+        "operation": "create",
+        "name": "={{ $json.body.item_name }}",
+        "additionalFields": {
+          "description": "={{ $json.body.description }}",
+          "regularPrice": "={{ $json.body.standard_rate }}",
+          "sku": "={{ $json.body.item_code }}"
+        },
+        "dimensionsUi": {},
+        "imagesUi": {
+          "imagesValues": [
+            {
+              "alt": "",
+              "src": "={{ $json.body.image }}",
+              "name": ""
+            }
+          ]
+        },
+        "metadataUi": {}
+      },
+      "id": "ece5d1c1-419e-4ee1-a79a-3f8c50d393d5",
+      "name": "WooCommerce2",
+      "type": "n8n-nodes-base.wooCommerce",
+      "typeVersion": 1,
+      "position": [
+        540,
+        700
+      ],
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "EZOxoxISbbkbECz0",
+          "name": "WooCommerce account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "product",
+        "operation": "update",
+        "productId": "={{ $('WooCommerce3').item.json.id }}",
+        "updateFields": {
+          "description": "={{ $('Webhook1').item.json.body.description }}",
+          "name": "={{ $('Webhook1').item.json.body.item_name }}",
+          "regularPrice": "={{ $('Webhook1').item.json.body.standard_rate }}"
+        },
+        "dimensionsUi": {},
+        "imagesUi": {
+          "imagesValues": [
+            {
+              "alt": "",
+              "src": "={{ $json.selectedImage }}",
+              "name": "="
+            }
+          ]
+        },
+        "metadataUi": {}
+      },
+      "id": "b5ec65e5-8d7d-4601-bc8a-afb976087a1c",
+      "name": "WooCommerce",
+      "type": "n8n-nodes-base.wooCommerce",
+      "typeVersion": 1,
+      "position": [
+        900,
+        860
+      ],
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "EZOxoxISbbkbECz0",
+          "name": "WooCommerce account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "productId": "={{ $json.id }}"
+      },
+      "id": "39c89c54-f3c0-4365-bcee-4fb6084427f9",
+      "name": "WooCommerce1",
+      "type": "n8n-nodes-base.wooCommerce",
+      "typeVersion": 1,
+      "position": [
+        720,
+        1040
+      ],
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "EZOxoxISbbkbECz0",
+          "name": "WooCommerce account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 1,
+        "options": {
+          "sku": "={{ $json.body.item_code }}"
+        }
+      },
+      "id": "7975063a-9a4d-4b19-bcd0-ad8fcac141d5",
+      "name": "WooCommerce3",
+      "type": "n8n-nodes-base.wooCommerce",
+      "typeVersion": 1,
+      "position": [
+        540,
+        860
+      ],
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "EZOxoxISbbkbECz0",
+          "name": "WooCommerce account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 1,
+        "options": {
+          "sku": "={{ $json.body.item_code }}"
+        }
+      },
+      "id": "b7dc7c9b-b113-4c04-bd88-9d759d3410c0",
+      "name": "WooCommerce4",
+      "type": "n8n-nodes-base.wooCommerce",
+      "typeVersion": 1,
+      "position": [
+        540,
+        1040
+      ],
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "EZOxoxISbbkbECz0",
+          "name": "WooCommerce account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "after-insert",
+        "options": {}
+      },
+      "id": "89d1441a-b9c9-483d-a83c-b1bb39c1b029",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        360,
+        700
+      ],
+      "webhookId": "d02554cd-7a80-4232-960a-20d9d6df5e72"
+    },
+    {
+      "parameters": {
+        "httpMethod": "DELETE",
+        "path": "n8n-item-delete",
+        "options": {}
+      },
+      "id": "51ac63f6-0548-4d21-aa03-deaf5a407b93",
+      "name": "Webhook2",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        360,
+        1040
+      ],
+      "webhookId": "e3896cfb-1d5a-4779-9a53-6b366413a2f2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const webhookData = $node[\"Webhook1\"].json.body;\n\nlet selectedImage;\n\nif (webhookData && webhookData.image && webhookData.image !== \"None\") {\n    selectedImage = webhookData.image;\n} else {\n    selectedImage = \"https://trioproject.frappe.cloud/files/demo.webp\";\n}\n\nif ( selectedImage == \"https://trioproject.frappe.cloud\" ) {\n  selectedImage = \"https://trioproject.frappe.cloud/files/demo.webp\";\n}\n\nreturn [{ json: { selectedImage: selectedImage } }];\n"
+      },
+      "id": "15ee8317-cfa5-4c4a-9b4c-62321fdc34ef",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        860
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "PUT",
+        "path": "n8n-item-update",
+        "options": {}
+      },
+      "id": "3753fba6-6ee2-41e0-9a11-80fcfcc35b00",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        360,
+        860
+      ],
+      "webhookId": "38d77fee-f8ba-4372-ad9a-b555c004704f"
+    },
+    {
+      "parameters": {
+        "content": "Đồng bộ sản phẩm ERP -> Woo",
+        "height": 583.1578947368403,
+        "width": 786.9473684210527
+      },
+      "id": "15f1b4dd-e918-44d0-aaa5-746adc58fdd0",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        300,
+        640
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "WooCommerce4": {
+      "main": [
+        [
+          {
+            "node": "WooCommerce1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WooCommerce3": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "WooCommerce2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "WooCommerce4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "WooCommerce3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "WooCommerce",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "65f632cf-fe60-4b4b-8185-d60a66994752",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2631a7aa3d54abe5fc73d8421f8b14123eda65d475cdf594e6f2825725d05e9f"
+  },
+  "id": "KdrsZSlUUCmXhBeq",
+  "tags": []
+}
