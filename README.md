@@ -18,6 +18,13 @@ Sinh viên:
 
 ---
 
+## Tài liệu
+
+[Word](https://1drv.ms/w/c/bc371bdf3eae6ab0/EZWHBi3gRiBArCaEQqYqlfMBhFUh8BT8GhSIqILtB87Y3Q?e=oqdzyU)
+[PowerPoint](https://1drv.ms/p/c/bc371bdf3eae6ab0/ERrRvagF7LJMkfvogehV-qIBuRFhxUwtEQUMtnuzbxhEtg?e=PSJ0jB)
+
+---
+
 ## Mục Lục
 
 1. [Giới thiệu đề tài](#giới-thiệu-đề-tài)
