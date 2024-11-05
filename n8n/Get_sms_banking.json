@@ -1,0 +1,116 @@
+{
+  "name": "sms_tpbank",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const output = [];\n\nfor (const item of $input.all()) {\n    const content = item.json.body.content;\n    const tienChuyenKhoanMatch = content.match(/PS:\\+?(\\d+\\.\\d+)VND/);\n    const tienChuyenKhoan = tienChuyenKhoanMatch ? tienChuyenKhoanMatch[1] : null;\n    const noiDungChuyenKhoanMatch = content.match(/QRWEB(\\d+)/);\n    const noiDungChuyenKhoan = noiDungChuyenKhoanMatch ? noiDungChuyenKhoanMatch[1] : null;\n    output.push({\n        json: {\n            tien_nhan_chuyen_khoan: tienChuyenKhoan,\n            noi_dung_chuyen_khoan: noiDungChuyenKhoan\n        }\n    });\n}\n\nreturn output;\n"
+      },
+      "id": "fdd2fd82-d6c0-4013-9a56-3a5fac603c76",
+      "name": "Xử lý: Nội dung, Tiền chuyển khoản",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "order",
+        "operation": "update",
+        "orderId": "={{ $json.noi_dung_chuyen_khoan }}",
+        "updateFields": {
+          "status": "processing"
+        },
+        "billingUi": {},
+        "couponLinesUi": {},
+        "feeLinesUi": {},
+        "lineItemsUi": {},
+        "metadataUi": {},
+        "shippingUi": {},
+        "shippingLinesUi": {}
+      },
+      "id": "eb46d1ab-e4e3-437d-bc3a-8e268acd364e",
+      "name": "WooCommerce",
+      "type": "n8n-nodes-base.wooCommerce",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        420
+      ],
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "EZOxoxISbbkbECz0",
+          "name": "WooCommerce account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sms-tpbank",
+        "options": {}
+      },
+      "id": "106f4fd1-94ed-4374-99f8-bc572aaff1ff",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        840,
+        420
+      ],
+      "webhookId": "a7471d0f-a2ce-4864-8d85-21dd90e46c4d"
+    },
+    {
+      "parameters": {
+        "content": "Nhận sms chuyển khoản và cập nhật trạng thái đơn hàng",
+        "height": 294.5797394350565,
+        "width": 738.8669684408021
+      },
+      "id": "097c891e-a00c-47ec-a661-e6966e46122c",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        720,
+        340
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Xử lý: Nội dung, Tiền chuyển khoản": {
+      "main": [
+        [
+          {
+            "node": "WooCommerce",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Xử lý: Nội dung, Tiền chuyển khoản",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6071e78c-24db-4f9c-985e-f338d88c8f92",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2631a7aa3d54abe5fc73d8421f8b14123eda65d475cdf594e6f2825725d05e9f"
+  },
+  "id": "G0jT6FJiPHiRYrF8",
+  "tags": []
+}

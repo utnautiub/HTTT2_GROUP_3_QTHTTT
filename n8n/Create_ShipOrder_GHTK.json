@@ -1,0 +1,116 @@
+{
+  "name": "Tự động tạo đơn GHTK",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "05a943cd-030a-41bb-9555-f723b1d62163",
+        "options": {}
+      },
+      "id": "1e293f5b-68cc-44c8-8c28-f3baa4657aee",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        700,
+        300
+      ],
+      "webhookId": "05a943cd-030a-41bb-9555-f723b1d62163"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const address = $json.body.fields.dia_chi_nhan_hang.value.value;\nconst product = $json.body.fields.danh_sach_san_pham.value.value;\nconst product_code = $json.body.key;\nconst value = $json.body.fields.gia_tien.value.value;\nconst phone = $json.body.fields.phone.value.value;\nconst name = $json.body.fields.ten_khach_hang.value.value;\n\nconst parts = address.split(',').map(part => part.trim());\n\n// Gán từng phần vào biến tương ứng\nconst a = parts[0] || ''; // Số nhà và tên đường\nconst b = parts[1] || ''; // Phường/Xã\nconst c = parts[2] || ''; // Quận/Huyện\nconst d = parts[3] || ''; // Thành phố\n\nreturn {a: a, b:b, c:c, d:d, address:address, product: product, code: product_code, value: value, phone: phone, name: name};"
+      },
+      "id": "a08f5846-9e04-465c-988e-5971ca3a624f",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.giaohangtietkiem.vn/services/shipment/order",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Token",
+              "value": "19DggdNmHiWwCJ9PvJ1HFNPN6XFTfv8GkZUVfN"
+            },
+            {
+              "name": "X-Client-Source",
+              "value": "S22748035"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"products\": [\n    {\n      \"name\": \"{{ $json.product }}\",\n      \"weight\": 1,\n      \"quantity\": 1,\n      \"product_code\": 1234\n    }\n  ],\n  \"order\": {\n    \"id\": \"{{ $json.code }}\",\n    \"pick_name\": \"HN-nội thành\",\n    \"pick_address\": \"175 Tây Sơn\",\n    \"pick_province\": \"Hà Nội\",\n    \"pick_district\": \"Quận Đống Đa\",\n    \"pick_tel\": \"0911222333\",\n    \"tel\": \"{{ $json.phone }}\",\n    \"name\": \"{{ $json.name }}\",\n    \"address\": \"{{ $json.a }}\",\n    \"province\": \"{{ $json.d }}\",\n    \"district\": \"{{ $json.c }}\",\n    \"ward\": \"{{ $json.b }}\",\n    \"hamlet\": \"Khác\",\n    \"value\": {{ $json.value }},\n    \"pick_money\": 20000\n  }\n}",
+        "options": {}
+      },
+      "id": "9241c082-46f2-4d00-9930-29331fae5874",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1140,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Tự động tạo đơn GHTK",
+        "height": 287.25242400189137,
+        "width": 709
+      },
+      "id": "1b0e17bc-d575-4023-a020-26b8922344c9",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        640,
+        220
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "41640b69-3e95-49bf-84bf-73e89e5d91e9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2631a7aa3d54abe5fc73d8421f8b14123eda65d475cdf594e6f2825725d05e9f"
+  },
+  "id": "gQ1W6FSeGonFTC4J",
+  "tags": []
+}
